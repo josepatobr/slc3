@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="layout-container">
+    <aside class="aside">
+        <br><br>
+        <h1 class="name">José Carlos</h1>
+  
+        <br><br><br><br>
+        <hr>
+        <ul class="my_tasks">  
+            <h1 class="title">Minhas Tarefas</h1>  
+            {% for task in tasks %}
+                <li><a href="{% url 'tasks' task.id %}" class="taks_url">{{ task.name_task }}</a></li>        
+            {% empty %}
+                <p class="description">Você ainda não criou nenhuma task.</p>
+            {% endfor %}
+        </ul>
+        
+        <hr>
+        <ul style="list-style: none; padding: 0;">
+            <li><a class="conf_url" href="{% url 'conf' %}">Configuração</a></li>        
+        </ul>
+    </aside>
+
+    
+    <main class="main-content">
+        <h1 class="main_title">{{ task.name_task }}</h1>
+            <p class="main_description"> 
+                {{ task.description_task }}
+            <br>
+        <input type="text" class="description_task" name="description_task" placeholder="Descrição da sua Task">
+        <br>
+        <hr>
+
+        <div class="form_stage">
+            <h3 style="color: white;"> Não iniciado </h3>
+            <select class="select-stage " name="stage_select">
+                <option value=""  style="color: white; background-color: rgb(11 14 18); " disabled selected>Selecione uma tarefa</option>
+                {% for stage in stages %}
+                    <option class="options" value="{{ stage.id }}">{{ stage.name_stages }}</option>
+                {% endfor %}
+            </select>
+            
+            <form method="post">{% csrf_token %}
+                <input type="text" class="name_stages" name="name_stages" placeholder="Novo projeto">
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

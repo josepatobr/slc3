@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>slc3</title>
+        <link href="{% static 'css/home.css' %}" rel="stylesheet">
+        <link href="{% static 'css/base.css' %}" rel="stylesheet">
+        <link href="{% static 'css/tasks.css' %}" rel="stylesheet">
+
+
+     
+    </head>
+
+    <body class="body">
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+    </body>

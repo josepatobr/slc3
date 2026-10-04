@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="layout-container">
+    <aside class="aside">
+        <br><br>
+        <h1 class="name">José Carlos</h1>
+  
+        <br><br><br><br>
+        <hr>
+        <ul class="my_tasks">  
+            <h1 class="title">Minhas Tarefas</h1>  
+            {% for t in tasks %}
+                <li><a href="{% url 'tasks' t.id %}" class="taks_url">{{ t.name_task }}</a></li>        
+            {% empty %}
+                <p class="description">Você ainda não criou nenhuma task.</p>
+            {% endfor %}
+        </ul>
+        
+        <hr>
+        <ul style="list-style: none; padding: 0;">
+            <li><a class="conf_url" href="{% url 'conf' %}">Configuração</a></li>        
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <h1 class="main_title">Criar sua Tarefa</h1>
+        <hr>
+        <p class="main_description"> 
+            Bem-vindo(a) de volta! Este é o seu espaço central para transformar ideias em ações e manter o controle total dos seus projetos.
+            Comece criando a sua primeira tarefa agora mesmo ou selecione uma existente na barra lateral à esquerda para ver os detalhes!
+        </p>
+        <br>
+        
+        <form class="form_task" method="post">{% csrf_token %}
+            <input type="text" class="name_task" name="name_task" placeholder="Nome da sua tarefa">
+            <br>
+            <input type="text" class="description_task" name="description_task" placeholder="Descrição da sua Task">
+            <br>
+            <button class="btn" type="submit">Criar Tarefa</button>
+        </form>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+
+</div>
+{% endblock %}
