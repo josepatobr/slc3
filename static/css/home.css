@@ -18,10 +18,11 @@
 }
 .name{
     color: white;
-    text-align: center;
     margin: 0 auto;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 200%;
+    justify-self: center;
+    display: flex;
 }
 
 .my_tasks {

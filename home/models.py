@@ -9,6 +9,7 @@ class Status_Tasks(models.TextChoices):
 
 
 class Principal_Tasks(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     name_task = models.CharField(max_length=50, unique=False, blank=False, null=False)
     description_task = models.TextField(blank=True, null=True)
 
@@ -25,8 +26,8 @@ class Stages(models.Model):
     status_stages = models.CharField(
         choices=Status_Tasks, default=Status_Tasks.not_started, null=True, blank=True
     )
-    project_manager = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, null=True, blank=True
+    project_manager = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
     )
     end_date = models.DateField(blank=True, null=True)
 

@@ -2,51 +2,177 @@
 {% load static %}
 
 {% block content %}
-<div class="layout-container">
-    <aside class="aside">
-        <br><br>
-        <h1 class="name">José Carlos</h1>
-  
-        <br><br><br><br>
-        <hr>
-        <ul class="my_tasks">  
-            <h1 class="title">Minhas Tarefas</h1>  
-            {% for task in tasks %}
-                <li><a href="{% url 'tasks' task.id %}" class="taks_url">{{ task.name_task }}</a></li>        
-            {% empty %}
-                <p class="description">Você ainda não criou nenhuma task.</p>
-            {% endfor %}
-        </ul>
+    <div class="layout-container">
+        <aside class="aside">
+            <br><br>
+            <a href="{% url 'home' %}" class="name"> José Carlos </a>
+
+            <br><br><br><br>
+            <hr>
+            <ul class="my_tasks">  
+                <h1 class="title">Minhas Tarefas</h1>  
+                {% for task in tasks %}
+                    <li><a href="{% url 'tasks' task.id %}" class="taks_url">{{ task.name_task }}</a></li>        
+                {% empty %}
+                    <p class="description">Você ainda não criou nenhuma task.</p>
+                {% endfor %}
+            </ul>
+            
+
+        </aside>
+
         
-        <hr>
-        <ul style="list-style: none; padding: 0;">
-            <li><a class="conf_url" href="{% url 'conf' %}">Configuração</a></li>        
-        </ul>
-    </aside>
+        <main class="main-content">
+            <h1 class="main_title">{{ task.name_task }}</h1>
+                <p class="main_description"> 
+                    {{ task.description_task }}
+                <br>
+            <input type="text" class="description_task" name="description_task" placeholder="Descrição da sua Task">
+            <br>
+            <hr>
+            
+            <div class="container-stages">
+                <div class="form_stage">
+                    <h3 style="color: white;"> Não iniciado </h3>
+                    <select class="select-stage" id="select-stage" name="stage_select">
+                        <option value=""  style="color: white; background-color: rgb(11 14 18); " disabled selected>Selecione uma tarefa</option>
+                            {% for stage in stages %}
+                                {% if stage.status_stages == "not_started" %}
+                                    <option class="options" value="{{ stage.id }}">{{ stage.name_stages }}</option>
+                                {% endif %}
+                            {% endfor %}
+                    </select>
+                            
+                    <form method="post">{% csrf_token %}
+                        <input type="text" class="name_stages" name="name_stages" placeholder="Novo projeto">
+                    </form>
+                </div>
+                
+
+                
+                <div class="form_stage" style="border-color: blue;">
+                    <h3 style="color: rgb(32, 71, 244);"> Em andamento </h3>
+                    <select class="select-stage"  id="select-stage" name="stage_select">
+                        <option value=""  style="color: white; background-color: rgb(11 14 18); " disabled selected>Selecione uma tarefa</option>
+                            {% for stage in stages %}
+                                {% if stage.status_stages == "in_progress" %}
+                                    <option class="options" value="{{ stage.id }}">{{ stage.name_stages }}</option>
+                                {% endif %}
+                            {% endfor %}
+                    </select>
+                            
+                    <form method="post">{% csrf_token %}
+                        <input type="text" class="name_stages" name="name_stages" placeholder="Novo projeto">
+                    </form>
+                </div>
+                
+                <div class="form_stage" style="border-color: green;">
+                    <h3 style="color: rgb(9, 255, 1);"> Concluido </h3>
+                    <select class="select-stage " id="select-stage" name="stage_select">
+                        <option value=""  style="color: white; background-color: rgb(11 14 18); " disabled selected>Selecione uma tarefa</option>
+                            {% for stage in stages %}
+                                {% if stage.status_stages == "completed" %}
+                                    <option class="options" value="{{ stage.id }}">{{ stage.name_stages }}</option>
+                                {% endif %}
+                            {% endfor %}
+                    </select>
+                            
+                    <form method="post">{% csrf_token %}
+                        <input type="text" class="name_stages" name="name_stages" placeholder="Novo projeto">
+                    </form>
+                </div>
+            </div>
+
+            <div class="task_chosen">
+                <h1 class="stage_title"> {{ task.name_task }}</h1>
+                <div class="task_div" style="display: flex; flex-direction: column; gap: 20px;">
+                    {% for stage in stages %}
+                        <form method="POST">{% csrf_token %}
+                            <input type="hidden" name="stage_id" value="{{ stage.id }}">
+
+                                <div id="stage-item-{{ stage.id }}" class="stage-item" style="display: none; border: 1px solid rgba(255,255,255,0.3); padding: 20px; border-radius: 8px;">                            <div>
+                                    <p style="border: 1px solid white; width: 80%; height: 40px; color: white; text-align: center; font-size: 30px; margin: 0 auto 10px auto;">
+                                        {{ stage.name_stages }}
+                                    </p>
+                                    <input type="text" class="inputs" name="name_stage_change" placeholder="alterar o nome da tarefa" style="width: 80%; display: block; margin: 0 auto;">
+                                </div>
+
+                                <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.2);">
+
+                                <div>
+                                    <p style="border: 1px solid white; width: 80%; height: 80px; color: white; text-align: center; font-size: 25px; margin: 0 auto 10px auto;">
+                                        {{ stage.description_stages }}
+                                    </p>
+                                    <input type="text" class="inputs" name="description_stage_change" placeholder="descrição da tarefa" style="width: 80%; display: block; margin: 0 auto;">
+                                </div>
+
+                                <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.2);">
+
+                                <div>             
+                                    <p style="border: 1px solid white; width: 80%; height: 80px; color: white; text-align: center; font-size: 25px; margin: 0 auto 10px auto;">
+                                        {{ stage.comment_stages }}
+                                    </p>
+                                    <input type="text" class="inputs" name="comment_stage_change" placeholder="comentário da tarefa" style="width: 80%; display: block; margin: 0 auto;"> 
+                                </div>
+
+                                <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.2);">
+
+                                <div style="margin-bottom: 15px;">
+                                    <label style="color: white; display: block; margin-bottom: 5px;">Status da tarefa:</label>
+                                    <select name="status_stage" style="width: 20%; color: black;">
+                                        <option value="not_started" {% if stage.status_stages == "not_started" %}selected{% endif %}>não iniciado</option>
+                                        <option value="in_progress" {% if stage.status_stages == "in_progress" %}selected{% endif %}>Em andamento</option>
+                                        <option value="completed" {% if stage.status_stages == "completed" %}selected{% endif %}>Concluído</option>
+                                    </select>   
+                                </div>
+
+                                <div style="margin-bottom: 15px;">
+                                    <label style="color: white; display: block; margin-bottom: 5px;">Responsável pela tarefa:</label>
+                                    <input type="text" name="project_manager_stage" value="{{ stage.project_manager }}" style="width: 20%; color: black;">   
+                                </div>
+
+                                <div style="margin-bottom: 15px;">
+                                    <label style="color: white; display: block; margin-bottom: 5px;">Data prevista para o fim:</label>
+                                    <input type="date" name="date_stage" value="{{ stage.end_date|date:'Y-m-d' }}" style="width: 20%; color: black;">  
+                                </div>
+
+                                <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Salvar Alterações</button>
+
+                            </div>
+                        </form>    
+                    {% endfor %}
+                </div>
+            </div>
+
+
+
+            
+            
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener("change", function(event) {
+        if (event.target && event.target.id === "select-stage") {
+            const selectedStageId = event.target.value;
+
+            const allStages = document.querySelectorAll(".stage-item");
+            allStages.forEach(item => {
+                item.style.display = "none";
+            });
+
+            if (selectedStageId) {
+                const targetStage = document.getElementById(`stage-item-${selectedStageId}`);
+                if (targetStage) {
+                    targetStage.style.display = "block";
+                }
+            }
+        }
+    });
+            
 
     
-    <main class="main-content">
-        <h1 class="main_title">{{ task.name_task }}</h1>
-            <p class="main_description"> 
-                {{ task.description_task }}
-            <br>
-        <input type="text" class="description_task" name="description_task" placeholder="Descrição da sua Task">
-        <br>
-        <hr>
+    </script>
 
-        <div class="form_stage">
-            <h3 style="color: white;"> Não iniciado </h3>
-            <select class="select-stage " name="stage_select">
-                <option value=""  style="color: white; background-color: rgb(11 14 18); " disabled selected>Selecione uma tarefa</option>
-                {% for stage in stages %}
-                    <option class="options" value="{{ stage.id }}">{{ stage.name_stages }}</option>
-                {% endfor %}
-            </select>
-            
-            <form method="post">{% csrf_token %}
-                <input type="text" class="name_stages" name="name_stages" placeholder="Novo projeto">
-            </form>
-        </div>
-    </main>
-</div>
 {% endblock %}
+
